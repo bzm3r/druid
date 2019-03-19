@@ -17,6 +17,7 @@ extern crate kurbo;
 extern crate piet;
 extern crate piet_common;
 extern crate time;
+extern crate xi_trace;
 
 use std::any::Any;
 use std::cell::RefCell;
@@ -30,6 +31,7 @@ use piet::{FillRule, FontBuilder, RenderContext, Text, TextLayoutBuilder};
 use druid_shell::platform::PresentStrategy;
 
 use druid_shell::platform::WindowBuilder;
+use druid_shell::trace;
 use druid_shell::win_main;
 use druid_shell::window::{WinHandler, WindowHandle};
 
@@ -47,6 +49,7 @@ impl WinHandler for PerfTest {
     }
 
     fn paint(&self, rc: &mut piet_common::Piet) -> bool {
+        let _t = xi_trace::trace_block("paint", &["paint"]);
         let mut state = self.0.borrow_mut();
         let (width, height) = state.size;
         let bg = rc.solid_brush(0x272822ff).unwrap();
@@ -138,6 +141,9 @@ impl WinHandler for PerfTest {
 }
 
 fn main() {
+    #[cfg(feature = "trace")]
+    xi_trace::enable_tracing();
+
     druid_shell::init();
 
     let mut run_loop = win_main::RunLoop::new();
@@ -157,4 +163,7 @@ fn main() {
     let window = builder.build().unwrap();
     window.show();
     run_loop.run();
+
+    #[cfg(feature = "trace")]
+    trace::save_trace();
 }

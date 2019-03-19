@@ -231,6 +231,10 @@ impl MyWndProc {
             let handle = self.handle.borrow().get_idle_handle().unwrap();
             // Note: maybe add WindowHandle as arg to idle handler so we don't need this.
             let handle2 = handle.clone();
+
+            #[cfg(feature = "trace")]
+            let _t = xi_trace::trace_block("add_idle", &["add_idle"]);
+
             handle.add_idle(move |_| handle2.invalidate());
         }
     }
@@ -273,6 +277,9 @@ impl WndProc for MyWndProc {
                 let s = state.as_mut().unwrap();
                 if let Some(ref mut ds) = s.dcomp_state {
                     if !ds.sizing {
+                        #[cfg(feature = "trace")]
+                        let _t = xi_trace::trace_block("present", &["present"]);
+
                         (*ds.swap_chain).Present(1, 0);
                         let _ = ds.dcomp_device.commit();
                     }

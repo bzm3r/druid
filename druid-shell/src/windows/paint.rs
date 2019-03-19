@@ -19,6 +19,8 @@
 //! dxgi render targets so we can use present options for minimal
 //! invalidation and low-latency frame timing.
 
+extern crate xi_trace;
+
 use std::mem;
 use std::ptr::null_mut;
 
@@ -50,6 +52,7 @@ pub(crate) unsafe fn create_render_target(
     d2d_factory: &direct2d::Factory,
     hwnd: HWND,
 ) -> Result<HwndRenderTarget, Error> {
+    let _t = xi_trace::trace_block("create render target", &["RT"]);
     let mut rect: RECT = mem::uninitialized();
     GetClientRect(hwnd, &mut rect);
     let width = (rect.right - rect.left) as u32;
@@ -74,6 +77,7 @@ pub(crate) unsafe fn create_render_target_dxgi(
     swap_chain: *mut IDXGISwapChain1,
     dpi: f32,
 ) -> Result<DxgiSurfaceRenderTarget, Error> {
+    let _t = xi_trace::trace_block("create render target dxgi", &["RT"]);
     let mut buffer: *mut IDXGISurface = null_mut();
     as_result((*swap_chain).GetBuffer(
         0,

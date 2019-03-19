@@ -25,8 +25,12 @@ extern crate objc;
 #[macro_use]
 extern crate lazy_static;
 
+#[cfg(feature = "trace")]
+extern crate xi_trace;
+
 pub mod error;
 pub mod keycodes;
+pub mod trace;
 pub mod window;
 
 #[cfg(target_os = "windows")]

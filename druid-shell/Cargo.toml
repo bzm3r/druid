@@ -11,6 +11,9 @@ edition = "2018"
 [package.metadata.docs.rs]
 default-target = "x86_64-pc-windows-msvc"
 
+[features]
+trace = []
+
 [dependencies]
 piet-common = "0.0.2"
 piet = "0.0.2"
@@ -22,6 +25,7 @@ time = "0.1.39"
 directwrite = "0.1.2"
 direct2d = "0.2.0"
 wio = "0.2"
+xi-trace = "0.1"
 
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.6"
